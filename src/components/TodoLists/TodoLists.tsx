@@ -1,6 +1,8 @@
 import { Todo } from "../../utils/interface";
 import "./todolists.css";
 import { MdOutlineEditNote, MdDelete } from "react-icons/md";
+import { useGetData } from "../../services/services";
+import { useEffect } from "react";
 
 interface Props {
   todolists: Todo[];
@@ -11,18 +13,32 @@ interface Props {
 
 const TodoLists = ({
   todolists,
-  settodolists,
   handleUpdateTodo,
   handleDeleteTodo,
+  settodolists,
 }: Props) => {
   console.log(todolists);
 
+  const { data, error, loading } = useGetData(
+    "https://jsonplaceholder.typicode.com/todos"
+  );
+  useEffect(() => {
+    if (loading) {
+      console.log("Loading...");
+    } else if (error) {
+      console.error("Error:", error);
+    } else {
+      console.log("Data:", data);
+      settodolists(data);
+    }
+  }, [data, error, loading]);
+  
   return (
     <div className="todolists">
       {todolists.map((todo: Todo) => {
         return (
           <div className="todo" key={todo.id}>
-            <p className="todo_title">{todo.todo}</p>
+            <p className="todo_title">{todo.title}</p>
             <div className="todo_icons">
               <span onClick={() => handleUpdateTodo(todo.id)}>
                 <MdOutlineEditNote size={24} />

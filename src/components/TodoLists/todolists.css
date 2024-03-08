@@ -5,9 +5,9 @@
   gap: 1rem;
   box-sizing: border-box;
   margin: 0 auto;
-
-  overflow: hidden;
+  overflow: scroll;
   width: 900px;
+  height: 70vh;
 }
 .todo {
   background-color: rgb(247, 199, 67);

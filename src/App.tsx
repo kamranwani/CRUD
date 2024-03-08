@@ -3,7 +3,10 @@ import "./App.css";
 import InputField from "./components/InputField/InputField";
 import { Todo } from "./utils/interface";
 import TodoLists from "./components/TodoLists/TodoLists";
+
 const App: React.FC = () => {
+ 
+
   const [todo, setTodo] = useState<string>("");
   const [currentItemId, setCurrentItemId] = useState<number>(0);
   const [isUpdate, setIsUpdate] = useState<boolean>(true);
@@ -13,30 +16,35 @@ const App: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (todo) {
-      setTodoList([...todoList, { id: Date.now(), todo: todo, isDone: false }]);
+      setTodoList([
+        {
+          id: Date.now(),
+          title: todo,
+          completed: false,
+          userId: Math.floor(Math.random() * 9) + 1,
+        },
+        ...todoList,
+      ]);
     }
     setTodo("");
   };
-
-  useEffect(() => {
-    console.log(todoList);
-  }, [todoList]);
 
   const handleUpdateTodo = (id: number) => {
     const updateTodo = todoList.find((todo) => todo.id === id);
 
     if (updateTodo) {
       setIsUpdate(false);
-      setTodo(updateTodo.todo);
+      setTodo(updateTodo.title);
       setCurrentItemId(id);
     }
   };
 
   const updateList = (id: number) => {
+    console.log(todoList, "hello");
     const updatedList = todoList.map((item) =>
-      item.id === id ? { ...item, todo: todo, isDone: false } : item
+      item.id === id ? { ...item, title: todo } : item
     );
-
+    console.log(updatedList, "hi");
     setTodoList(updatedList);
     setIsUpdate(true);
   };
@@ -45,8 +53,6 @@ const App: React.FC = () => {
     const updatedList = todoList.filter((todo) => todo.id != id);
     setTodoList(updatedList);
   };
-
- 
 
   return (
     <div className="App">
@@ -64,7 +70,6 @@ const App: React.FC = () => {
         settodolists={setTodoList}
         handleUpdateTodo={handleUpdateTodo}
         handleDeleteTodo={handleDeleteTodo}
-       
       />
     </div>
   );
